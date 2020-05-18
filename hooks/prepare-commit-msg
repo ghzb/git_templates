@@ -1,0 +1,31 @@
+#!/usr/bin/env python
+
+import sys, os
+from datetime import date
+from subprocess import check_output
+
+commit_path = sys.argv[1]
+commit_type = ""
+commit_hash = ""
+commit_branch = check_output(['git', 'symbolic-ref', '--short', 'HEAD']).strip()
+
+if len(sys.argv) > 2:
+    commit_type = sys.argv[2]
+
+if len(sys.argv) > 3:
+    commit_hash = sys.argv[3]
+
+print("Preparing commit...")
+print("File: %s" % commit_path)
+print("Type: %s" % commit_type)
+print("Hash: %s" % commit_hash)
+print("Branch: %s" % commit_branch)
+
+with open(commit_path, 'r+') as f:
+    content = f.read()
+    f.seek(0,0)
+    f.write("%s: %s" %( date.today(), content))
+
+# with open(commit_path, 'r+') as f:
+#     content = f.read()
+#     print ("YOUR MESSAGE WAS: %s" % content)

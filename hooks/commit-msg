@@ -1,0 +1,38 @@
+#!/usr/bin/env python
+
+#!/usr/bin/env python
+
+import sys, os
+from datetime import date
+from subprocess import check_output
+
+commit_path = sys.argv[1]
+commit_type = ""
+commit_hash = ""
+commit_branch = check_output(['git', 'symbolic-ref', '--short', 'HEAD']).strip()
+pwd = os.getcwd()
+
+if len(sys.argv) > 2:
+    commit_type = sys.argv[2]
+
+if len(sys.argv) > 3:
+    commit_hash = sys.argv[3]
+
+print("Preparing commit...")
+print("PWD: %s" % pwd)
+
+expected_dir = "D:\\work\\code\\"
+if (expected_dir in pwd):
+    repo = pwd.replace(expected_dir, '').replace('\\', '-')
+    
+    os.system('git remote add origin git@github.com:ghzb/%s.git' % repo)
+
+    a = check_output(['git', 'remote', 'show']).decode('utf8')
+    print("Available remotes:\n" + a)
+    with open(commit_path, 'r+') as f:
+        content = f.read()
+        print ("YOUR MESSAGE WAS: %s" % content)
+
+else:
+    print ("NOT CODE FOR WORK")
+    sys.exit(1)
